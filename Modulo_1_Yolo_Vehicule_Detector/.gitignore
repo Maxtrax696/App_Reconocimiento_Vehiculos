@@ -1,0 +1,11 @@
+## Para ignorar archivos que no deben subirse a GitHub (Imagenes temp, archivos .pyc, __pycache__, etc)
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.env
+.DS_Store
+*.jpg
+*.png

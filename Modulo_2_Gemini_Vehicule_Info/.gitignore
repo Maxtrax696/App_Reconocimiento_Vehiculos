@@ -1,0 +1,24 @@
+# Cache y artefactos de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.swp
+
+# Archivos de entorno
+.env
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de prueba o imágenes temporales
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+
+# Carpetas ocultas
+.idea/
+.vscode/
