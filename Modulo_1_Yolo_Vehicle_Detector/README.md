@@ -45,9 +45,9 @@ docker run -p 8000:8000 yolo-detector
 ```
 
 ## 🧑‍💻 Autores
-Universidad Central del Ecuador
-Facultad de Ingenieria y Ciencias Aplicadas
-Sistemas de Informacion
-Mineria de Datos
-Yoshua Calahorrano y John Guerra
-SIS8-001
+- Universidad Central del Ecuador
+- Facultad de Ingenieria y Ciencias Aplicadas
+- Sistemas de Informacion
+- Mineria de Datos
+- Yoshua Calahorrano y John Guerra
+- SIS8-001

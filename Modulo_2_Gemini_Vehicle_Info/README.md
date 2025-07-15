@@ -68,9 +68,9 @@ Requiere conexión a internet para acceder a Gemini.
 Usa el modelo actualizado gemini-2.0-flash.
 
 ## 🧑‍💻 Autores
-Universidad Central del Ecuador
-Facultad de Ingenieria y Ciencias Aplicadas
-Sistemas de Informacion
-Mineria de Datos
-Yoshua Calahorrano y John Guerra
-SIS8-001
+- Universidad Central del Ecuador
+- Facultad de Ingenieria y Ciencias Aplicadas
+- Sistemas de Informacion
+- Mineria de Datos
+- Yoshua Calahorrano y John Guerra
+- SIS8-001

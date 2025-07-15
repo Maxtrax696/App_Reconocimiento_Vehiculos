@@ -18,75 +18,81 @@ Este proyecto consiste en el desarrollo de un sistema de **identificación de ve
 
 ---
 
+## Link de repositorio GitHub
+https://github.com/Maxtrax696/App_Reconocimiento_Vehiculos
+
+---
+
 ## 🧱 Arquitectura por módulos
 
 ```bash
 PROYECTO_FINAL/
-├── Modulo_1_Yolo_Vehicule_Detector/
-|    └──  (detección de vehículos con YOLOv8)
-├── Modulo_2_Gemini_Vehicle_Info/
-|    └──  (análisis generativo con Google Gemini 2.0 Flash)
-├── docs/
-|    └──  (documentación complementaria)
-└── README.md
+├── Modulo_1_Yolo_Vehicule_Detector/         # Microservicio de detección (YOLOv8)
+├── Modulo_2_Gemini_Vehicle_Info/            # Microservicio de inferencia (Gemini)
+├── Modulo_3_Unificador_Backend/             # Microservicio unificado (YOLO + Gemini)
+├── docker-compose.yml                       # Orquestador de los 3 servicios
+└── docs/                                     # Documentación adicional
 ```
 
 ## ⚙️ Tecnologías utilizadas
 
-| Componente          | Tecnología                     |
-|---------------------|--------------------------------|
-| Backend REST        | Python + FastAPI               |
-| IA visión computacional | YOLOv8 (`ultralytics`)     |
-| IA generativa       | Gemini 2.0 Flash (Google AI)   |
-| Contenedores        | Docker                         |
-| Comunicación        | API HTTP (JSON + imágenes)     |
+| Componente           | Tecnología                   |
+| -------------------- | ---------------------------- |
+| Backend REST         | Python + FastAPI             |
+| Visión computacional | YOLOv8 (`ultralytics`)       |
+| IA generativa        | Gemini 2.0 Flash (Google AI) |
+| Contenedores         | Docker                       |
+| Orquestación         | Docker Compose               |
+| Comunicación         | API REST (JSON + Imágenes)   |
 
 ---
 
-## 🚀 Cómo ejecutar los módulos localmente
+## 🚀 Cómo levantar Docker Compose
 
-### Módulo 1 – Detección con YOLOv8
+Asegurarse de tener un archivo .env en Modulo_2_Gemini_Vehicle_Info/ con tu API Key ya que en GitHub no se sube el archivo:
 
 ```bash
-cd Modulo_1_Yolo_Vehicule_Detector
-docker build -t yolo-detector .
-docker run -p 8000:8000 yolo-detector
+GEMINI_API_KEY=api_key
 ```
-Accede a: http://localhost:8000/docs
+Luego, desde la raíz del proyecto (PROYECTO_FINAL/):
 
-## Módulo 2 – Generación con Gemini
 ```bash
-cd Modulo_2_Gemini_Vehicle_Info
-docker build -t yolo-gemini .
-docker run -p 8001:8000 --env-file .env yolo-gemini
+docker compose up --build
 ```
-Accede a: http://localhost:8001/docs
+
+Esto levantará automáticamente:
+- yolo-detector en http://localhost:8000
+- gemini-analyzer en http://localhost:8001
+- unified-api en http://localhost:8002
 
 ---
 
 ## 📦 Flujo de trabajo actual
 
-1. Subir imagen original a **POST /detect** (Módulo 1)
-2. Guardar la imagen base64 como archivo **.jpg**
-3. Subir **recorte.jpg** a **POST /analyze** (Módulo 2)
-4. Recibir JSON con la descripción completa del vehículo
+🔁 Flujo completo con microservicio unificado
+1. El usuario sube una imagen a POST /analyze
+2. El sistema:
+   * Detecta el vehículo con YOLO
+   * Recorta automáticamente
+   * Analiza la imagen con Gemini
+3. Devuelve toda la información del vehículo en formato JSON:
+
+Prueba el endpoint en:
+📍 http://localhost:8002/docs
 
 ---
 
-## 🔜 Próxima Fase (en curso)
-✔️ Combinar ambos módulos en un solo microservicio:
+## 🧪 Pruebas individuales
+También puedes acceder a los microservicios por separado:
+   * YOLO → POST /detect en http://localhost:8000
+   * Gemini → POST /analyze en http://localhost:8001
 
-1. Un solo POST /analyze que:
-2. Detecta vehículo
-3. Recorta imagen
-4. Llama a Gemini
-
-Devuelve todo el resultado automáticamente
+---
 
 ## 🧑‍💻 Autores
-Universidad Central del Ecuador
-Facultad de Ingenieria y Ciencias Aplicadas
-Sistemas de Informacion
-Mineria de Datos
-Yoshua Calahorrano y John Guerra
-SIS8-001
+- Universidad Central del Ecuador
+- Facultad de Ingenieria y Ciencias Aplicadas
+- Sistemas de Informacion
+- Mineria de Datos
+- Yoshua Calahorrano y John Guerra
+- SIS8-001
