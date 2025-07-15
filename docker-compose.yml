@@ -1,0 +1,37 @@
+services:
+
+  yolo-detector:
+    build:
+      context: ./Modulo_1_Yolo_Vehicle_Detector
+    container_name: yolo-detector
+    ports:
+      - "8000:8000"
+    networks:
+      - vehiclenet
+
+  gemini-analyzer:
+    build:
+      context: ./Modulo_2_Gemini_Vehicle_Info
+    container_name: gemini-analyzer
+    ports:
+      - "8001:8000"
+    env_file:
+      - ./Modulo_2_Gemini_Vehicle_Info/.env
+    networks:
+      - vehiclenet
+
+  unified-api:
+    build:
+      context: ./Modulo_3_Unificador_Backend
+    container_name: unified-api
+    ports:
+      - "8002:8000"
+    networks:
+      - vehiclenet
+    depends_on:
+      - yolo-detector
+      - gemini-analyzer
+
+networks:
+  vehiclenet:
+    driver: bridge
