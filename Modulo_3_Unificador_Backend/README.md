@@ -50,7 +50,6 @@ Body: file=@vehiculo.jpg
 
 ## 🚀 Cómo ejecutar
 ```bash
-Copy code
 docker build -t yolo-integrator .
 docker run -p 8002:8000 yolo-integrator
 ```
