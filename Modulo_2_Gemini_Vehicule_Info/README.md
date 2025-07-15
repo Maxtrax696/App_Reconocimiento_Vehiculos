@@ -25,16 +25,16 @@ Este microservicio se encarga de analizar una **imagen recortada de un vehículo
 ## 📦 Estructura del Proyecto
 
 Modulo_2_Gemini_Vehicle_Info/
-    app/
-        gemini_client.py    # Lógica de conexión con Gemini
-        prompt_builder.py   # Prompt estático
-        utils.py            # Conversión base64
-    main.py                 # Servidor FastAPI
-    requirements.txt        # Dependencias Python
-    Dockerfile              # Contenedor
-    .env                    # Clave de la API (no subir)
-    .gitignore
-    README.md
+|  |__ app/
+|      |__ gemini_client.py    # Lógica de conexión con Gemini
+|      |__ prompt_builder.py   # Prompt estático
+|      |__ utils.py            # Conversión base64
+|  main.py                 # Servidor FastAPI
+|  requirements.txt        # Dependencias Python
+|  Dockerfile              # Contenedor
+|  .env                    # Clave de la API (no subir)
+|  .gitignore
+|  README.md
 
 ---
 
