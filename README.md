@@ -31,8 +31,6 @@ PROYECTO_FINAL/
 └── README.md
 ```
 
----
-
 ## ⚙️ Tecnologías utilizadas
 
 | Componente          | Tecnología                     |

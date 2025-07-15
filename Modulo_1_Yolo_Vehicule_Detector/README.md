@@ -20,6 +20,7 @@
 ---
 
 ## Estructura del modulo 1
+
 ```bash
 Modulo_1_Yolo-Vehicule-Detector/
 ├── app/
@@ -31,7 +32,6 @@ Modulo_1_Yolo-Vehicule-Detector/
 ├── Dockerfile                # contenedor opcional
 ├── .gitignore
 └── README.md
-
 ```
 
 ## 🚀 Cómo ejecutar con Docker
