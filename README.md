@@ -22,13 +22,13 @@ Este proyecto consiste en el desarrollo de un sistema de **identificación de ve
 
 ```bash
 PROYECTO_FINAL/
-    Modulo_1_Yolo_Vehicule_Detector/
-        (detección de vehículos con YOLOv8)
-    Modulo_2_Gemini_Vehicle_Info/
-        (análisis generativo con Google Gemini 2.0 Flash)
-    docs/
-        (documentación complementaria)
-    README.md
+├── Modulo_1_Yolo_Vehicule_Detector/
+|    └──  (detección de vehículos con YOLOv8)
+├── Modulo_2_Gemini_Vehicle_Info/
+|    └──  (análisis generativo con Google Gemini 2.0 Flash)
+├── docs/
+|    └──  (documentación complementaria)
+└── README.md
 ```
 
 ---
