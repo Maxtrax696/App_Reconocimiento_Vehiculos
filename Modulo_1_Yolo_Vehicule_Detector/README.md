@@ -20,17 +20,19 @@
 ---
 
 ## Estructura del modulo 1
-Modulo_1_Yolo-Vehicle-Detector/
-|    |__ app/
-|        |__ detection.py         # lógica de YOLO
-|        |__ utils.py             # funciones auxiliares
-|        |__ guardar_recorte.py   # guarda la image recortada para ingresar al modulo 2
-|    main.py                  # API REST con FastAPI
-|    requirements.txt         # librerías necesarias
-|    Dockerfile               # contenedor opcional
-|    .gitignore
-|    README.md
 
+```bash
+Modulo_1_Yolo-Vehicule-Detector/
+├── app/
+│   ├── detection.py          # lógica de YOLO
+│   ├── utils.py              # funciones auxiliares
+│   └── guardar_recorte.py    # guarda la imagen recortada
+├── main.py                   # API REST con FastAPI
+├── requirements.txt          # librerías necesarias
+├── Dockerfile                # contenedor opcional
+├── .gitignore
+└── README.md
+```
 
 ## 🚀 Cómo ejecutar con Docker
 
