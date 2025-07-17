@@ -9,7 +9,9 @@ def build_prompt():
         "  \"precio\": \"...\",\n"
         "  \"reseña\": \"...\"\n"
         "}\n\n"
-        "El precio debe estar en dólares y referenciado a Ecuador. "
+        "Tendras en cuenta que el año debe ser especifico del vehiculo, donde haras una mejor prediccion de este, ya que habra modelos similares de otros años."
+        "El precio debe estar en dólares."
         "La reseña manten un enfoque del pais de origen de la marca y funcionalidad para el consumidor"
-        "Sé claro, conciso y profesional en la respuesta."
+        "Agrega tipo de motor del vehiculo, cilindraje y si el combstible del ecuador es recomendable para este y si es recomendable para las calles del Ecuador"
+        "Sé claro, conciso y profesional en la respuesta, no debe sobrepasar los 100 caracterteres"
     )
