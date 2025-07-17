@@ -14,7 +14,7 @@ Este proyecto consiste en el desarrollo de un sistema de **identificación de ve
    - Año
    - Precio referencial en Ecuador
    - Breve reseña (respecto a origen del vehiculo y funcionalidad para el consumidor)
-4. El sistema responde con toda esta información en formato JSON.
+4. Finalmente, los resultados son guardados automáticamente en **MySQL** a través de un microservicio adicional.
 
 ---
 
@@ -27,11 +27,13 @@ https://github.com/Maxtrax696/App_Reconocimiento_Vehiculos
 
 ```bash
 PROYECTO_FINAL/
-├── Modulo_1_Yolo_Vehicule_Detector/         # Microservicio de detección (YOLOv8)
-├── Modulo_2_Gemini_Vehicle_Info/            # Microservicio de inferencia (Gemini)
-├── Modulo_3_Unificador_Backend/             # Microservicio unificado (YOLO + Gemini)
-├── docker-compose.yml                       # Orquestador de los 3 servicios
-└── docs/                                     # Documentación adicional
+├── Modulo_1_Yolo_Vehicule_Detector/ # Microservicio YOLOv8 para recorte de imagen
+├── Modulo_2_Gemini_Vehicle_Info/ # Microservicio Gemini para inferencia de vehículo
+├── Modulo_3_Unificador_Backend/ # Microservicio orquestador de los anteriores
+├── Modulo_4_Base/ # Microservicio logger para guardar resultados en MySQL
+├── docker-compose.yml # Orquestador general
+├── data/ # Carpeta para persistencia de MySQL
+└── docs/ # Documentación adicional
 ```
 
 ## ⚙️ Tecnologías utilizadas
@@ -41,20 +43,47 @@ PROYECTO_FINAL/
 | Backend REST         | Python + FastAPI             |
 | Visión computacional | YOLOv8 (`ultralytics`)       |
 | IA generativa        | Gemini 2.0 Flash (Google AI) |
+| Base de datos        | MySQL 5.7 (Docker)           |
 | Contenedores         | Docker                       |
 | Orquestación         | Docker Compose               |
 | Comunicación         | API REST (JSON + Imágenes)   |
 
 ---
 
-## 🚀 Cómo levantar Docker Compose
+## 📦 Flujo de trabajo automatizado
 
-Asegurarse de tener un archivo .env en Modulo_2_Gemini_Vehicle_Info/ con tu API Key ya que en GitHub no se sube el archivo:
+1. Cliente móvil captura imagen y la envía al endpoint /analyze (Módulo 3)
 
-```bash
-GEMINI_API_KEY=api_key
+2. Módulo 3 llama internamente:
+   a) YOLOv8 (Módulo 1) → devuelve imagen recortada
+   b) Gemini (Módulo 2) → analiza imagen y devuelve marca, modelo, etc.
+   c) Logger (Módulo 4) → guarda resultados en MySQL automáticamente
+
+3. Cliente recibe la respuesta final en JSON
+
+---
+
+## 🧾 Estructura de datos almacenados en MySQL
+
+| Campo     | Tipo     | Descripción                                      |
+|-----------|----------|--------------------------------------------------|
+| id        | INT      | Identificador único (autoincremental)            |
+| marca     | VARCHAR  | Marca del vehículo detectado                     |
+| modelo    | VARCHAR  | Modelo del vehículo                              |
+| precio    | VARCHAR  | Precio aproximado estimado por Gemini            |
+| resena    | TEXT     | Reseña generada por IA sobre funcionalidad/uso   |
+
+---
+
+## 🚀 Cómo levantar el sistema con Docker Compose
+
+### Requisitos:
+
+- Tener creado un archivo `.env` dentro de `Modulo_2_Gemini_Vehicle_Info/` con tu API Key:
+
+```env
+GEMINI_API_KEY=tu_api_key_aqui
 ```
-Luego, desde la raíz del proyecto (PROYECTO_FINAL/):
 
 ```bash
 docker compose up --build
@@ -65,27 +94,34 @@ Esto levantará automáticamente:
 - gemini-analyzer en http://localhost:8001
 - unified-api en http://localhost:8002
 
+Esto levantará automáticamente:
+
+   * yolo-detector en → http://localhost:8000
+   * gemini-analyzer en → http://localhost:8001
+   * unified-api en → http://localhost:8002
+   * logger-api (sin puerto expuesto directamente)
+   * db (persistente en ./data/mysql)
+
 ---
-
-## 📦 Flujo de trabajo actual
-
-🔁 Flujo completo con microservicio unificado
-1. El usuario sube una imagen a POST /analyze
-2. El sistema:
-   * Detecta el vehículo con YOLO
-   * Recorta automáticamente
-   * Analiza la imagen con Gemini
-3. Devuelve toda la información del vehículo en formato JSON:
 
 Prueba el endpoint en:
 📍 http://localhost:8002/docs
 
 ---
 
-## 🧪 Pruebas individuales
-También puedes acceder a los microservicios por separado:
-   * YOLO → POST /detect en http://localhost:8000
-   * Gemini → POST /analyze en http://localhost:8001
+## 🛢️ Ver datos guardados en MySQL (opcional)
+Puedes ingresar al contenedor de la base de datos con:
+
+```bash
+docker exec -it db mysql -u root -p
+# Contraseña: 1234
+```
+
+Luego ejecutar:
+```bash
+USE vehiculos_db;
+SELECT * FROM vehiculos;
+```
 
 ---
 

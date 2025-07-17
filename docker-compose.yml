@@ -26,11 +26,24 @@ services:
     container_name: unified-api
     ports:
       - "8002:8000"
+    volumes:
+      - ./Modulo_4_Base:/app/Modulo_4_Base
     networks:
       - vehiclenet
     depends_on:
       - yolo-detector
       - gemini-analyzer
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    env_file:
+      - ./Modulo_4_Base/.env
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - vehiclenet
 
 networks:
   vehiclenet:
