@@ -27,14 +27,17 @@ https://github.com/Maxtrax696/App_Reconocimiento_Vehiculos
 
 ```bash
 PROYECTO_FINAL/
-├── Modulo_1_Yolo_Vehicule_Detector/ # Microservicio YOLOv8 para recorte de imagen
-├── Modulo_2_Gemini_Vehicle_Info/ # Microservicio Gemini para inferencia de vehículo
-├── Modulo_3_Unificador_Backend/ # Microservicio orquestador de los anteriores
-├── Modulo_4_Base/ # Microservicio logger para guardar resultados en MySQL
-├── docker-compose.yml # Orquestador general
-├── data/ # Carpeta para persistencia de MySQL
-└── docs/ # Documentación adicional
+├── Modulo_1_Yolo_Vehicule_Detector/   # Detección de vehículo (YOLOv8)
+├── Modulo_2_Gemini_Vehicle_Info/      # Inferencia con Gemini 2.0 Flash
+├── Modulo_3_Unificador_Backend/       # Orquestador del proceso completo
+├── Modulo_4_Base/                     # Logger (guardar en MySQL)
+├── frontend/                          # Interfaz web y lógica JS
+├── nginx/                             # Configuración del servidor proxy
+├── data/                              # Persistencia de base de datos
+└── docker-compose.yml                 # Orquestador completo con Docker
 ```
+
+---
 
 ## ⚙️ Tecnologías utilizadas
 
@@ -44,22 +47,24 @@ PROYECTO_FINAL/
 | Visión computacional | YOLOv8 (`ultralytics`)       |
 | IA generativa        | Gemini 2.0 Flash (Google AI) |
 | Base de datos        | MySQL 5.7 (Docker)           |
+| Frontend             | HTML, Bootstrap 5, JS        |
 | Contenedores         | Docker                       |
 | Orquestación         | Docker Compose               |
-| Comunicación         | API REST (JSON + Imágenes)   |
+| Proxy/Servidor       | NGINX                        |
 
 ---
 
-## 📦 Flujo de trabajo automatizado
+## 🖥️ Frontend Web
 
-1. Cliente móvil captura imagen y la envía al endpoint /analyze (Módulo 3)
+- Permite subir imágenes desde PC o celular
+- Muestra resultados analizados
+- Almacena historial local
+- Permite descargar la tarjeta del resultado como imagen JPG
+- Compatible con dispositivos móviles
 
-2. Módulo 3 llama internamente:
-   a) YOLOv8 (Módulo 1) → devuelve imagen recortada
-   b) Gemini (Módulo 2) → analiza imagen y devuelve marca, modelo, etc.
-   c) Logger (Módulo 4) → guarda resultados en MySQL automáticamente
+Accede desde cualquier navegador en la red local con:
 
-3. Cliente recibe la respuesta final en JSON
+http://<IP-de-la-PC>
 
 ---
 
@@ -68,12 +73,26 @@ PROYECTO_FINAL/
 | Campo     | Tipo     | Descripción                                      |
 |-----------|----------|--------------------------------------------------|
 | id        | INT      | Identificador único (autoincremental)            |
-| marca     | VARCHAR  | Marca del vehículo detectado                     |
+| marca     | VARCHAR  | Marca detectada                                  |
 | modelo    | VARCHAR  | Modelo del vehículo                              |
 | precio    | VARCHAR  | Precio aproximado estimado por Gemini            |
-| resena    | TEXT     | Reseña generada por IA sobre funcionalidad/uso   |
+| resena    | TEXT     | Reseña generada por IA                           |
 
 ---
+
+## 📦 Flujo de trabajo del sistema
+
+```plaintext
+Usuario → / → Subir imagen
+       → /analyze (unified-api)
+           → YOLOv8 detecta y recorta
+           → Gemini analiza y describe
+           → Logger guarda en MySQL
+← Se retorna JSON con la información + imagen recortada
+```
+
+---
+
 
 ## 🚀 Cómo levantar el sistema con Docker Compose
 
@@ -95,17 +114,19 @@ Esto levantará automáticamente:
 - unified-api en http://localhost:8002
 
 Esto levantará automáticamente:
-
-   * yolo-detector en → http://localhost:8000
-   * gemini-analyzer en → http://localhost:8001
-   * unified-api en → http://localhost:8002
-   * logger-api (sin puerto expuesto directamente)
-   * db (persistente en ./data/mysql)
+   - YOLOv8 – http://localhost:8000
+   - Gemini – http://localhost:8001
+   - Backend (Unificador) – http://localhost:8002
+   - NGINX – http://localhost (aquí se accede al sistema)
+   - Logger + Base de datos – en red interna
 
 ---
 
-Prueba el endpoint en:
-📍 http://localhost:8002/docs
+## 🛡️ Permitir acceso desde otros dispositivos
+   * Asegúrate de permitir el puerto 80 en el firewall
+   * Conéctate a la misma red local
+   * Accede desde navegador de otro dispositivo:
+      **http://<ip-local-del-servidor>**
 
 ---
 
@@ -115,10 +136,6 @@ Puedes ingresar al contenedor de la base de datos con:
 ```bash
 docker exec -it db mysql -u root -p
 # Contraseña: 1234
-```
-
-Luego ejecutar:
-```bash
 USE vehiculos_db;
 SELECT * FROM vehiculos;
 ```
