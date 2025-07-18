@@ -2,6 +2,7 @@ import requests
 import base64
 import json
 from Modulo_4_Base.app.database import save_vehicle_data  # Importamos la función de base de datos
+import re
 
 YOLO_URL = "http://yolo-detector:8000/detect"
 GEMINI_URL = "http://gemini-analyzer:8000/analyze"
@@ -41,7 +42,12 @@ def process_vehicle_analysis(image_bytes: bytes) -> dict:
     if raw_response:
         try:
             # Convertimos la respuesta `raw_response` (string JSON) a diccionario
-            vehicle_info = json.loads(raw_response.strip("```json\n").strip("```"))
+            # Extraer solo el bloque JSON usando expresión regular
+            match = re.search(r'\{.*\}', raw_response, re.DOTALL)
+            if not match:
+                return {"success": False, "error": "No se pudo extraer JSON de la respuesta Gemini"}
+
+            vehicle_info = json.loads(match.group())
 
             # Extraer datos
             marca = vehicle_info.get("marca")
@@ -59,7 +65,17 @@ def process_vehicle_analysis(image_bytes: bytes) -> dict:
             # Paso 4: Guardar los datos en la base de datos
             save_vehicle_data(marca, modelo, precio, detalles)
 
-            return gemini_data
+            return {
+                "success": True,
+                "data": {
+                    "marca": marca,
+                    "modelo": modelo,
+                    "año": vehicle_info.get("año", ""),
+                    "precio": f"${precio:,.2f}",
+                    "reseña": detalles,
+                    "imagen": f"data:image/jpeg;base64,{base64_crop}"
+                }
+            }
 
         except json.JSONDecodeError as e:
             print(f"Error al procesar los datos de Gemini: {e}")
