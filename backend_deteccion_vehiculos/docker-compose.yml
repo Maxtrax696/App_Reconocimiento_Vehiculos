@@ -1,0 +1,61 @@
+services:
+
+  gemini-analyzer:
+    build:
+      context: ./Modulo_Gemini_Vehicle_Info
+    container_name: gemini-analyzer
+    env_file:
+      - ./Modulo_Gemini_Vehicle_Info/.env
+    networks:
+      - vehiclenet
+
+  unified-api:
+    build:
+      context: ./Modulo_Unificador_Backend
+    container_name: unified-api
+    ports:
+      - "8002:8000"
+    env_file:
+      - ./Modulo_Unificador_Backend/.env
+    networks:
+      - vehiclenet
+    depends_on:
+      - gemini-analyzer
+      - logger-api
+
+  logger-api:
+    build:
+      context: ./Modulo_Base
+    container_name: logger-api
+    env_file:
+      - ./Modulo_Base/.env
+    networks:
+      - vehiclenet
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    env_file:
+      - ./Modulo_Base/.env
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    networks:
+      - vehiclenet
+
+  nginx:
+    image: nginx:latest
+    container_name: frontend-nginx
+    volumes:
+      - ./nginx_conf/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    networks:
+      - vehiclenet
+    depends_on:
+      - unified-api
+
+networks:
+  vehiclenet:
+    driver: bridge
