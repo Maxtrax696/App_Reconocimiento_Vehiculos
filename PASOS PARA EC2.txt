@@ -1,0 +1,48 @@
+ssh -i "tu-clave.pem" ubuntu@<IP_PUBLICA_EC2>
+
+
+//INSTALAR DOCKER Y DOCKER COMPOSE
+# Actualiza los paquetes
+sudo apt update && sudo apt upgrade -y
+
+
+# Instala Docker
+sudo apt install -y docker.io
+
+
+# Instala Docker Compose
+sudo apt install -y docker-compose
+
+
+# Habilita Docker al iniciar
+sudo systemctl enable docker
+
+
+# Da permisos al usuario 'ubuntu' para ejecutar Docker sin sudo
+sudo usermod -aG docker ubuntu
+
+exit
+
+
+//VOLVER A ENTRAR
+ssh -i "tu-clave.pem" ubuntu@<IP_PUBLICA_EC2>
+
+docker --version
+docker compose version
+
+exit
+
+//DESDE CMD
+# Para copiar archivos
+scp -i "clave.pem" -r "direccion raiz del proyecto" ubuntu@IP -PUBLICA-EC2:~/
+
+
+
+// ABRIR DB EN DOCKER EC2
+docker exec -it db bash
+
+mysql -u user -p
+1234
+
+USE vehiculos_db;
+SELECT * FROM vehiculos;
