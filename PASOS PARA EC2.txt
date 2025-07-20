@@ -32,9 +32,12 @@ docker compose version
 
 exit
 
-//DESDE CMD
+//DESDE Git Bash
 # Para copiar archivos
-scp -i "clave.pem" -r "direccion raiz del proyecto" ubuntu@IP -PUBLICA-EC2:~/
+$ scp -i ~/Desktop/key_Detector.pem \
+  /c/Users/MAXTRAX696/Desktop/backend_deteccion_vehiculos/Modulo_Gemini_Vehicle_Info/app/prompt_builder.py \
+  ubuntu@54.165.158.222:/home/ubuntu/backend_deteccion_vehiculos/Modulo_Gemini_Vehicle_Info/app/
+
 
 
 
