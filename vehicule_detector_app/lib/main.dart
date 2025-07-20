@@ -53,7 +53,7 @@ class _VehicleDetectorPageState extends State<VehicleDetectorPage> {
       _isLoading = true;
     });
 
-    final uri = Uri.parse("http://54.226.57.7/analyze");
+    final uri = Uri.parse("http://54.165.158.222/analyze");
 
     final request = http.MultipartRequest('POST', uri);
     request.files.add(
